@@ -174,27 +174,6 @@ REST_USE_JWT = True
 JWT_AUTH_COOKIE = "access"
 JWT_AUTH_REFRESH_COOKIE = "refresh"
 
-# -------------------------------------------------------------------
-# GOOGLE OAUTH
-# -------------------------------------------------------------------
-
-
-SOCIALACCOUNT_PROVIDERS = {
-    "google": {
-        "APPS": [
-            {
-                "client_id": os.getenv("GOOGLE_CLIENT_ID"), 
-                "secret": os.getenv("GOOGLE_CLIENT_SECRET"),  
-                "key": ""
-            }
-        ],
-        "SCOPE": ["profile", "email"],
-        "AUTH_PARAMS": {"access_type": "online"},
-        "FETCH_USERINFO": True,
-        "VERIFY_EMAIL": True,
-        "USE_ID_TOKEN": True,
-    }
-}
 
 # -------------------------------------------------------------------
 # INTERNATIONALIZATION
