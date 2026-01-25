@@ -36,15 +36,32 @@ The app allows users to create, manage, and monitor job applications while maint
 
 job-tracker/
 |----- backend/
-|  |-- job_tracker/
+|  |--- job_tracker/
+|      |--- settings.py
+|      |--- urls.py
 |  |--- applications/
+|      |--- models.py
+|      |--- permissions.py
+|      |--- serializers.py
+|      |--- views.py
+|      |--- urls.py
 |  |--- manage.py
 |  |--- requirements.txt
 |------ frontend/
 |  |--- src/
-|  |--- components/
-|  |--- services/
+|      |--- auth/
+|          |--- PrivateRoute.jsx
+|          |--- AuthContext.jsx
+|      |--- components/
+|          |--- Dashboard.jsx
+|          |--- JobForm.jsx
+|          |--- JobList.jsx
+|          |--- Login.jsx
+|      |--- services/
+|          |--- api.js
 |  |___ package.json
+|  |___ main.jsx
+|  |___ App.jsx
 |______ README.md
 
 

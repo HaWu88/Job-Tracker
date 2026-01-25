@@ -1,13 +1,18 @@
 import { useEffect, useState } from "react";
 import { Bar } from "react-chartjs-2";
 import api from "../services/api";
+import { 
+    Typography, 
+    Paper, 
+    Box,
+} from "@mui/material";
 import {
-Chart as ChartJS,
-CategoryScale,
-LinearScale,
-BarElement,
-Tooltip,
-Legend,
+    Chart as ChartJS,
+    CategoryScale,
+    LinearScale,
+    BarElement,
+    Tooltip,
+    Legend,
 } from "chart.js";
 
 ChartJS.register(
@@ -18,35 +23,52 @@ Tooltip,
 Legend
 );
 
-export default function Dashboard() {
-const [data, setData] = useState(null);
+ChartJS.register(CategoryScale, LinearScale, BarElement, Tooltip, Legend);
 
-useEffect(() => {
-    const token = localStorage.getItem("token");
-    if (!token) return; // Don't even try if we don't have a token yet
+export default function Dashboard({ refreshTrigger }) {
+    const [chartData, setChartData] = useState({labels: [], datasets: [],});
+    const [loading, setLoading] = useState(true);
 
-    api.get("/api/dashboard/")
-        .then(res => setData(res.data))
-        .catch(err => {
-            if (err.response?.status === 401) {
-                console.error("Session expired or invalid token");
-                // Optional: clear localstorage and redirect to login
-            }
-            console.error("Dashboard error: ", err);
-        });
-}, []);
+    useEffect(() => {
+        fetchStats();
+    }, [refreshTrigger]);
 
-if (!data) return <p>Loading dashboard...</p>
+    const fetchStats = async () => {
+    try {
+      const res = await api.get("/api/dashboard/");
+      const statusData = res.data.status_counts || [];
 
-return (
-    <Bar
-    data={{
-        labels: data.status_counts.map(s => s.current_status),
-        datasets: [{
-        label: "Applications",
-        data: data.status_counts.map(s => s.count),
-        }]
-    }}
-    />
-);
+      setChartData({
+        labels: statusData.map((s) => s.current_status),
+        datasets: [
+          {
+            label: "Applications",
+            data: statusData.map((s) => s.count),
+            backgroundColor: "rgba(25, 118, 210, 0.6)",
+          },
+        ],
+      });
+    } catch (err) {
+      console.error("Dashboard error: ", err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (
+    <Paper sx={{ p: 3, minHeight: '300px' }}>
+      <Typography variant="h6" gutterBottom>
+        Application Status
+      </Typography>
+      {loading ? (
+        <Typography>Loading Stats...</Typography>
+      ) : chartData.labels.length > 0 ? (
+        <Bar data={chartData} options={{ responsive: true }} />
+      ) : (
+        <Box sx={{ py: 5, textAlign: 'center' }}>
+          <Typography color="textSecondary">No data available yet. Add your first job below!</Typography>
+        </Box>
+      )}
+    </Paper>
+  );
 }

@@ -14,14 +14,4 @@ class JobApplicationSerializer(serializers.ModelSerializer):
         fields = "__all__"
         read_only_fields = ("user",)
 
-    def update(self, instance, validated_data):
-        new_status = validated_data.get("current_status", instance.current_status)
-
-        if instance.current_status != new_status:
-            ApplicationStatusAudit.objects.create(
-                application=instance,
-                previous_status=instance.current_status,
-                new_status=new_status,
-            )
-
-        return super().update(instance, validated_data)
+    

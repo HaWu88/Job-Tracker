@@ -27,7 +27,6 @@ INSTALLED_APPS = [
     # Third-party
     "rest_framework",
     "rest_framework.authtoken",
-    "django.contrib.sites",
     "corsheaders",
 
     # Local
@@ -42,31 +41,11 @@ SITE_ID = 1
 # -------------------------------------------------------------------
 # AUTH / USER
 # -------------------------------------------------------------------
-# -------------------------------------------------------------------
-# ALLAUTH DEFAULT FIX
-# DEFAULT if user DNE -> redirect to /accounts/signup/
-# Since this is API only app then disable redirect-based signup
-# -------------------------------------------------------------------
 
 AUTH_USER_MODEL = "applications.User"
 
-AUTHENTICATION_BACKENDS = (
-    "django.contrib.auth.backends.ModelBackend",
-    "allauth.account.auth_backends.AuthenticationBackend",
-)
-
-ACCOUNT_LOGIN_METHODS = {"email"}
-ACCOUNT_SIGNUP_FIELDS = ["email*", "password1*", "password2*"]
-
 ACCOUNT_EMAIL_VERIFICATION = "none"
 
-SOCIALACCOUNT_AUTO_SIGNUP = True
-
-# This tells allauth to link the social account to the existing user 
-# if the email addresses match and prevent redirect to nonexistent signup page
-SOCIALACCOUNT_QUERY_EMAIL = True
-SOCIALACCOUNT_EMAIL_AUTHENTICATION = True
-SOCIALACCOUNT_EMAIL_AUTHENTICATION_AUTO_CONNECT = True
 # -------------------------------------------------------------------
 # MIDDLEWARE
 # -------------------------------------------------------------------
@@ -80,7 +59,6 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
-    "allauth.account.middleware.AccountMiddleware",
 ]
 
 # -------------------------------------------------------------------
@@ -143,12 +121,19 @@ AUTH_PASSWORD_VALIDATORS = [
 # REST FRAMEWORK
 # -------------------------------------------------------------------
 
+# REST_FRAMEWORK = {
+#     "DEFAULT_AUTHENTICATION_CLASSES": (
+#         "rest_framework_simplejwt.authentication.JWTAuthentication",
+#     ),
+#     "DEFAULT_PERMISSION_CLASSES": (
+#         "rest_framework.permissions.IsAuthenticated",
+#     ),
+# }
+
+# see data without auth to stabilize app
 REST_FRAMEWORK = {
-    "DEFAULT_AUTHENTICATION_CLASSES": (
-        "rest_framework_simplejwt.authentication.JWTAuthentication",
-    ),
     "DEFAULT_PERMISSION_CLASSES": (
-        "rest_framework.permissions.IsAuthenticated",
+        "rest_framework.permissions.AllowAny",
     ),
 }
 
