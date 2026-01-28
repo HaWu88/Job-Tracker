@@ -1,7 +1,9 @@
 from rest_framework import serializers
 from .models import JobApplication, ApplicationStatusAudit
+from datetime import date, timedelta
 
 class ApplicationStatusAuditSerializer(serializers.ModelSerializer):
+    
     class Meta:
         model = ApplicationStatusAudit
         fields = "__all__"
@@ -13,5 +15,17 @@ class JobApplicationSerializer(serializers.ModelSerializer):
         model = JobApplication
         fields = "__all__"
         read_only_fields = ("user",)
+
+    def get_needs_followup(self, obj):
+        if obj.current_status != "applied":
+            return False
+        if not obj.applied_date:
+            return False
+        last_action_date = (
+            obj.last_contacted_at.date()
+            if obj.last_contacted_at
+            else obj.applied_date
+        )
+        return obj.applied_date <= date.today() - timedelta(days=1)
 
     

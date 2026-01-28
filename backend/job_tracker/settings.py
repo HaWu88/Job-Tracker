@@ -135,6 +135,7 @@ REST_FRAMEWORK = {
     "DEFAULT_PERMISSION_CLASSES": (
         "rest_framework.permissions.AllowAny",
     ),
+    "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.PageNumberPagination",
 }
 
 # -------------------------------------------------------------------
@@ -166,7 +167,8 @@ JWT_AUTH_REFRESH_COOKIE = "refresh"
 
 LANGUAGE_CODE = "en-us"
 
-TIME_ZONE = "UTC"
+# Change TIME_ZONE to your current time
+TIME_ZONE = "America/Los_Angeles"
 
 USE_I18N = True
 USE_TZ = True
