@@ -10,7 +10,8 @@ class ApplicationStatusAuditSerializer(serializers.ModelSerializer):
 
 class JobApplicationSerializer(serializers.ModelSerializer):
     audits = ApplicationStatusAuditSerializer(many=True, read_only=True)
-
+    needs_followup = serializers.SerializerMethodField()
+    
     class Meta:
         model = JobApplication
         fields = "__all__"

@@ -6,7 +6,7 @@ from dotenv import load_dotenv
 BASE_DIR = Path(__file__).resolve().parent.parent
 load_dotenv(os.path.join(BASE_DIR, ".env"))
 
-SECRET_KEY = 'django-insecure-3g44bbh^hvp@-6_f$a_1_g$j2hxlwyy95bo^h2&vpv64!mjju$'
+SECRET_KEY = os.getenv("DJANGO_SECRET_KEY")
 
 DEBUG = True
 
@@ -26,25 +26,16 @@ INSTALLED_APPS = [
 
     # Third-party
     "rest_framework",
-    "rest_framework.authtoken",
     "corsheaders",
 
     # Local
     "applications",
 
-    # For Testing purpose
-    "django_extensions",
 ]
 
 SITE_ID = 1
 
-# -------------------------------------------------------------------
-# AUTH / USER
-# -------------------------------------------------------------------
 
-AUTH_USER_MODEL = "applications.User"
-
-ACCOUNT_EMAIL_VERIFICATION = "none"
 
 # -------------------------------------------------------------------
 # MIDDLEWARE
@@ -60,6 +51,11 @@ MIDDLEWARE = [
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
+
+# ---------------------------
+# Google OAuth (frontend ID)
+# ---------------------------
+GOOGLE_CLIENT_ID = os.getenv("GOOGLE_CLIENT_ID")
 
 # -------------------------------------------------------------------
 # CORS (Frontend)
@@ -87,6 +83,8 @@ TEMPLATES = [
     },
 ]
 
+STATIC_URL = "/static/"
+STATIC_ROOT = BASE_DIR / "staticfiles"
 # -------------------------------------------------------------------
 # URLS / WSGI
 # -------------------------------------------------------------------
@@ -121,21 +119,12 @@ AUTH_PASSWORD_VALIDATORS = [
 # REST FRAMEWORK
 # -------------------------------------------------------------------
 
-# REST_FRAMEWORK = {
-#     "DEFAULT_AUTHENTICATION_CLASSES": (
-#         "rest_framework_simplejwt.authentication.JWTAuthentication",
-#     ),
-#     "DEFAULT_PERMISSION_CLASSES": (
-#         "rest_framework.permissions.IsAuthenticated",
-#     ),
-# }
-
-# see data without auth to stabilize app
 REST_FRAMEWORK = {
-    "DEFAULT_PERMISSION_CLASSES": (
-        "rest_framework.permissions.AllowAny",
+    # "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.PageNumberPagination",
+    "DEFAULT_PERMISSION_CLASSES": ("rest_framework.permissions.IsAuthenticated",),
+    "DEFAULT_AUTHENTICATION_CLASSES": (
+        "rest_framework_simplejwt.authentication.JWTAuthentication",
     ),
-    "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.PageNumberPagination",
 }
 
 # -------------------------------------------------------------------
@@ -152,13 +141,6 @@ SIMPLE_JWT = {
     "BLACKLIST_AFTER_ROTATION": True,
 }
 
-# -------------------------------------------------------------------
-# dj-rest-auth
-# -------------------------------------------------------------------
-
-REST_USE_JWT = True
-JWT_AUTH_COOKIE = "access"
-JWT_AUTH_REFRESH_COOKIE = "refresh"
 
 
 # -------------------------------------------------------------------
@@ -174,18 +156,12 @@ USE_I18N = True
 USE_TZ = True
 
 # -------------------------------------------------------------------
-# STATIC FILES
-# -------------------------------------------------------------------
-
-STATIC_URL = "/static/"
-STATIC_ROOT = BASE_DIR / "staticfiles"
-
-# -------------------------------------------------------------------
 # DEFAULT AUTO FIELD
 # -------------------------------------------------------------------
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
+AUTH_USER_MODEL = "applications.User"
 
 
 
