@@ -3,7 +3,7 @@ import { Typography, Paper, Box, Grid,
         TextField, Button, MenuItem } from "@mui/material";
 import api from "../services/api";
 
-const STATUS_OPTIONS = ["applied", "phone_screen", "on_site", "offer", "accepted", "rejected"];
+const STATUS_OPTIONS = ["applied", "phone_screen", "interview", "offer", "accepted", "rejected"];
 
 export default function JobForm({ onRefresh }) {
     const [form, setForm] = useState({

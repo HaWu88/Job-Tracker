@@ -20,8 +20,7 @@ class User(AbstractUser):
 STATUS_CHOICES = (
     ("applied", "Applied"),
     ("phone_screen", "Phone Screen"),
-    ("on_site", "On Site Interview"),
-    ("remote", "Remote Interview"),
+    ("interview", "Interview"),
     ("offer", "Offer"),
     ("accepted", "Accepted"),
     ("rejected", "Rejected"),

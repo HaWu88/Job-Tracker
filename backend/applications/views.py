@@ -69,7 +69,7 @@ class JobApplicationViewSet(viewsets.ModelViewSet):
         status_filter = self.request.query_params.get('status')
         if status_filter == 'needs_followup':
             # Applied > 1 day ago and still in 'applied' status
-            three_days_ago = timezone.now().date() - timedelta(days=1)
+            three_days_ago = timezone.now().date() - timedelta(days=3)
             queryset = queryset.filter(current_status='applied', applied_date__lte=three_days_ago)
         elif status_filter == 'interview':
             queryset = queryset.filter(current_status__in=['phone_screen', 'on_site', 'remote'])

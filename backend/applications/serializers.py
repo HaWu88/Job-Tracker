@@ -11,7 +11,19 @@ class ApplicationStatusAuditSerializer(serializers.ModelSerializer):
 class JobApplicationSerializer(serializers.ModelSerializer):
     audits = ApplicationStatusAuditSerializer(many=True, read_only=True)
     needs_followup = serializers.SerializerMethodField()
-    
+
+    contact_email = serializers.EmailField(
+        required=False,
+        allow_blank=True,
+        allow_null=True
+    )
+
+    contact_name = serializers.CharField(
+        required=False,
+        allow_blank=True,
+        allow_null=True
+    )
+
     class Meta:
         model = JobApplication
         fields = "__all__"
@@ -27,6 +39,6 @@ class JobApplicationSerializer(serializers.ModelSerializer):
             if obj.last_contacted_at
             else obj.applied_date
         )
-        return obj.applied_date <= date.today() - timedelta(days=1)
+        return last_action_date <= date.today() - timedelta(days=3)
 
     
